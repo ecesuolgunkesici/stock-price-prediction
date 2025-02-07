@@ -59,7 +59,7 @@ python3 stock_prediction.py
   
   Limitations: Struggled with volatility, slow adaptation to sudden changes.
   <p float="left">
-  <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/master/images/lstm/lstm_1.png" alt="alt text" width="350px" height="650px">
+  <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/main/images/lstm/lstm_1.png" alt="alt text" width="600px" height="300px">
   </p>
 
 ### Feature Engineering & Hyperparameter Tuning for LSTM
@@ -76,7 +76,7 @@ python3 stock_prediction.py
   - *Observations:* Feature engineering helped improve accuracy, but LSTM still lagged in capturing sharp price movements.
 
   <p float="left">
-  <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/master/images/lstm/lstm_2.png" alt="alt text" width="350px" height="650px">
+  <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/main/images/lstm/lstm_2.png" alt="alt text" width="600px" height="300px">
   </p>
 
   ### 3.2 Gated Recurrent Unit (GRU)
@@ -90,22 +90,22 @@ python3 stock_prediction.py
   - *Loss Function:* MSE  
   - *Epochs:* 20  
   - *Results:* RMSE = 2.53 (Best model)
-  - *Observations:* - GRU provided a better fit compared to LSTM, adapting well to volatility and llower RMSE indicated improved generalization.
+  - *Observations:* - GRU provided a better fit compared to LSTM, adapting well to volatility and lower RMSE indicated improved generalization.
 
     <p float="left">
-    <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/master/images/gru/gru.png" alt="alt text" width="350px" height="650px">
+    <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/main/images/gru/gru.png" alt="alt text" width="600px" height="300px">
     </p>
 
-  #### Training vs. Validation Loss Analysis
+  ### Training vs. Validation Loss Analysis
   - To further analyze model performance, we plotted the training vs. validation loss over epochs.
-  ### The results showed:
+  #### The results showed:
   - Stable validation loss, confirming that the model generalizes well.
   - No significant gap between training and validation loss, indicating minimal overfitting.
   - Small fluctuations in validation loss, suggesting a well-regularized model with good predictive power.
   - This analysis validated that our feature selection and hyperparameter tuning process helped in achieving a robust model without excessive overfitting.
 
   <p float="left">
-    <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/master/images/gru/gru_val_loss.png" alt="alt text" width="350px" height="650px">
+    <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/main/images/gru/gru_val_loss.png" alt="alt text" width="640px" height="480px">
     </p>
 
   ### 3.3 Prophet
@@ -113,7 +113,7 @@ python3 stock_prediction.py
   - *Limitations:* Did not capture short-term price movements well and trend-following nature led to high lag in predictions.
 
   <p float="left">
-  <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/master/images/prophet/prophet.png" alt="alt text" width="350px" height="650px">
+  <img src="https://github.com/ecesuolgunkesici/stock-price-prediction/blob/main/images/prophet/prophet.png" alt="alt text" width="600px" height="300px">
   </p>
 
 ## :flashlight: 4. Model Evaluation & Insights
@@ -134,87 +134,3 @@ This project demonstrated stock price forecasting using deep learning models. Th
 - Optuna Hyperparameter Optimization: https://optuna.org/
 - TensorFlow/Keras for Deep Learning: https://www.tensorflow.org/
 
-### Javascript
->There is no template for Javascript yet. 
-
-## :star: Screenshots
-<p float="left">
-  <img src="https://github.com/ilkerkesici/react-native-starter-kit/blob/master/template/only_auth/assets/login_ss_1.png" alt="alt text" width="350px" height="650px">
-  <img src="https://github.com/ilkerkesici/react-native-starter-kit/blob/master/template/only_auth/assets/register_ss.png" alt="alt text" width="350px" height="650px">
-  <img src="https://github.com/ilkerkesici/react-native-starter-kit/blob/master/template/yarmi/assets/1.png" alt="alt text" width="350px" height="650px">
-  <img src="https://github.com/ilkerkesici/react-native-starter-kit/blob/master/template/yarmi/assets/4.png" alt="alt text" width="350px" height="650px">
-  <img src="https://github.com/ilkerkesici/react-native-starter-kit/blob/master/template/yarmi/assets/8.png" alt="alt text" width="350px" height="650px">
-  <img src="https://github.com/ilkerkesici/react-native-starter-kit/blob/master/template/yarmi/assets/9.png" alt="alt text" width="350px" height="650px">
-</p>
-
-![](./template/chat/assets/dropdown_usage.gif)
-
-## :warning: Dependency
-### Note on installation
-These starter pack use 'yarn' while installing react-native dependencies. Thus you must install 'yarn' before creating an app.
-
-## :arrow_down: Installation
-#### Clone this repository
-
-sh
-git clone https://github.com/ilkerkesici/react-native-starter-kit.git
-
-#### Enter the folder
-
-sh
-cd react-native-starter-kit
-
-#### Permission for create_app.sh
-
-sh
-chmod +x create_component.sh
-
-
-## :flashlight: Usage
-### :iphone: Creating an App
-
-#### Run create_app.sh
-
-sh
-./create_app.sh
-
-#### Enter your app name
-
-sh
-# Enter your app name :
-MyAwesomeApp
-
-#### Enter your template
-
-sh
-# Enter template name :
-yarmi # If you don't want to create app with template, press 'Enter'
-
-### :rocket: Creating a Component
-#### Enter the project folder
-sh
-cd MyAwesomeApp
-
-#### Run 'create_component.sh' file 
-sh
-./create_component.sh
-
-#### Enter component name 
-sh
- # Enter the component name?
-MyAwesomeComponent
-
-
-## :clap: How to Contribute
-
-Hello developers! You can contribute this starter pack and deploy your templates. If you want to contribute to this project,  you can follow these steps.
-
-#### Creating bash file
-
-You must create a bash file like 'create_authantication_template.sh' file. You must add your installation scripts for template dependencies here. 
-
-#### Creating src folder
-You must create folder name is src, and add your tamplete or your components into this folder.
-
-#### Opening a pull request
-After you've made your changes or added features, you should open a pull request.
