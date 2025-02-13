@@ -11,8 +11,35 @@ def fetch_stock_data(ticker, start_date, end_date):
     df = yf.download(ticker, start=start_date, end=end_date)
     return df
 
+def calculate_adx(df, period=14):
+    df['TR'] = np.maximum(df['High'] - df['Low'], 
+                          np.maximum(abs(df['High'] - df['Close'].shift(1)), 
+                                     abs(df['Low'] - df['Close'].shift(1))))
+    
+    df['+DM'] = np.where((df['High'] - df['High'].shift(1)) > (df['Low'].shift(1) - df['Low']), 
+                         df['High'] - df['High'].shift(1), 0)
+    df['-DM'] = np.where((df['Low'].shift(1) - df['Low']) > (df['High'] - df['High'].shift(1)), 
+                         df['Low'].shift(1) - df['Low'], 0)
+
+    df['TR_smooth'] = df['TR'].rolling(period).mean()
+    df['+DM_smooth'] = df['+DM'].rolling(period).mean()
+    df['-DM_smooth'] = df['-DM'].rolling(period).mean()
+
+    df['+DI'] = 100 * (df['+DM_smooth'] / df['TR_smooth'])
+    df['-DI'] = 100 * (df['-DM_smooth'] / df['TR_smooth'])
+    
+    df['DX'] = 100 * abs(df['+DI'] - df['-DI']) / (df['+DI'] + df['-DI'])
+    
+    df['ADX'] = df['DX'].rolling(period).mean()
+    
+    return df.drop(columns=['TR', '+DM', '-DM', 'TR_smooth', '+DM_smooth', '-DM_smooth', '+DI', '-DI', 'DX'])
+
 def compute_technical_indicators(df):
-    df['RSI'] = 100 - (100 / (1 + df['Close'].diff().rolling(14).mean() / df['Close'].diff().rolling(14).std()))
+    delta = df['Close'].diff()  
+    gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()  
+    loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()  
+    RS = gain / (loss + 1e-10)
+    df['RSI'] = 100 - (100 / (1 + RS))
     df['EMA_12'] = df['Close'].ewm(span=12, adjust=False).mean()
     df['EMA_26'] = df['Close'].ewm(span=26, adjust=False).mean()
     df['MACD'] = df['EMA_12'] - df['EMA_26']
@@ -24,7 +51,7 @@ def compute_technical_indicators(df):
 
 def compute_advanced_features(df):
     df['Momentum'] = df['Close'].pct_change(periods=10)
-    df['ADX'] = df['High'].diff(1).abs().rolling(14).mean() / df['Close'].rolling(14).mean()
+    df = calculate_adx(df)
     df['Volume_Change'] = df['Volume'].pct_change()
     df['MA_Short'] = df['Close'].rolling(window=10).mean()
     df['MA_Long'] = df['Close'].rolling(window=50).mean()
@@ -93,7 +120,9 @@ def optimize_model(model_type):
         y_train, y_test = y[:train_size], y[train_size:]
         model = build_lstm_model((X_train.shape[1], X_train.shape[2]), dropout_rate) if model_type == 'LSTM' else build_gru_model((X_train.shape[1], X_train.shape[2]), dropout_rate)
         rmse, predictions_actual, y_test_actual = train_and_evaluate_model(model, X_train, y_train, X_test, y_test, scaler_close)
-        return rmse, predictions_actual, y_test_actual
+        trial.set_user_attr('predictions_actual', predictions_actual)
+        trial.set_user_attr('y_test_actual', y_test_actual)
+        return rmse
     
     study = optuna.create_study(direction='minimize')
     study.optimize(objective, n_trials=20)
@@ -101,6 +130,9 @@ def optimize_model(model_type):
     best_selected_features = ['Close'] + [feature for feature in ['RSI', 'MACD', 'Lower_Band', 'Volume_Change', 'Momentum', 'ADX', 'MA_Ratio'] if best_params.get(f'use_{feature}', True)]
     best_params['selected_features'] = best_selected_features
     best_params['rmse'] = study.best_value
+    best_trial = study.best_trial
+    predictions_actual = best_trial.user_attrs['predictions_actual']
+    y_test_actual = best_trial.user_attrs['y_test_actual']
     return best_params, predictions_actual, y_test_actual
 
 
